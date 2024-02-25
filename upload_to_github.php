@@ -6,7 +6,7 @@ $file = $_FILES['file'];
 // ข้อมูลสำหรับการเชื่อมต่อกับ GitHub API
 $username = 'Ph4kh1n';
 $repository = 'gallery';
-$token = '';
+$token = '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';
 
 // สร้าง URL สำหรับอัพโหลดไฟล์ไปยัง GitHub repository
 $url = "https://api.github.com/repos/{$username}/{$repository}/contents/images/{$file['name']}";
