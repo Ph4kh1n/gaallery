@@ -9,7 +9,7 @@ $repository = 'gallery';
 $token = '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';
 
 // สร้าง URL สำหรับอัพโหลดไฟล์ไปยัง GitHub repository
-$url = "https://api.github.com/repos/{$username}/{$repository}/contents/{$file['name']}";
+$url = "https://api.github.com/repos/{$username}/{$repository}/contents/images/{$file['name']}";
 
 // สร้างข้อมูลที่จะส่งไปยัง GitHub API
 $data = array(
