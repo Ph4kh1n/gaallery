@@ -1,48 +1,47 @@
 setTimeout(function() {
     var loader = document.querySelector('.loader');
     loader.classList.add('fadeOut'); // Add class to fade out
-
-    const check = false;
+    
     setTimeout(function() {
         loader.parentElement.style.display = 'none'; // Hide after fade out animation
         var myDiv = document.getElementById('main');
         myDiv.style.display = 'block';
         myDiv.classList.add('fadeIn'); // Add class to fade in
-        check = true;
     }, 1000); // Adjust to match transition duration
 
 }, 3000);
 
 function uploadImage() {
-    var fileInput = document.getElementById('fileInput');
-    var files = fileInput.files;
+  // เลือกไฟล์จาก input
+  var fileInput = document.getElementById('fileInput');
+  var file = fileInput.files[0];
 
-    var gallery = document.querySelector('.gallery');
+  // สร้างออบเจก File Reader
+  var reader = new FileReader();
 
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        var reader = new FileReader();
+  // เมื่ออ่านไฟล์เสร็จสิ้น
+  reader.onload = function(e) {
+      // นำข้อมูลรูปภาพไปใช้งาน
+      var imageData = e.target.result;
 
-        reader.onload = function(e) {
-            var imageUrl = e.target.result;
+      // สร้าง Element ของรูปภาพ
+      var imgElement = document.createElement('img');
+      imgElement.src = imageData;
 
-            var link = document.createElement('a');
-            link.href = imageUrl;
-            link.setAttribute('data-lightbox', 'models');
-            link.setAttribute('data-title', '');
+      // สร้าง Element ของลิงก์
+      var linkElement = document.createElement('a');
+      linkElement.href = imageData; // ให้ลิงก์นี้ชี้ไปยังรูปภาพ
+      linkElement.setAttribute('data-lightbox', 'models'); // เพิ่ม Attribute data-lightbox
+      linkElement.appendChild(imgElement); // เพิ่ม Element ของรูปภาพลงในลิงก์
 
-            var image = document.createElement('img');
-            image.src = imageUrl;
+      // นำ Element ของลิงก์ไปแทรกใน Element ที่มี class="gallery"
+      var gallery = document.querySelector('.gallery');
+      gallery.appendChild(linkElement);
+  };
 
-            link.appendChild(image);
-
-            gallery.appendChild(link);
-        };
-
-        reader.readAsDataURL(file);
-    }
+  // อ่านไฟล์เป็น Data URL
+  reader.readAsDataURL(file);
 }
-
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
     origin: 'top',
