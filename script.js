@@ -98,18 +98,29 @@ function loadImagesFromFirebase() {
 
               const newImage = document.createElement('img');
               newImage.setAttribute('src', url);
+              
+              newImageAnchor.appendChild(newImage);
 
-              /*const deleteButton = document.createElement('button');
+              /*const newTag = document.createElement('a');
+              newTag.setAttribute('href', url);
+              newTag.setAttribute('data-lightbox', 'models');
+              const newImageAnchor = document.createElement('div'); // สร้าง Element div สำหรับรวมรูปภาพและปุ่มลบ
+
+              const newImage = document.createElement('img');
+              newImage.setAttribute('src', url);
+
+              const deleteButton = document.createElement('button');
               deleteButton.textContent = 'Delete';
               deleteButton.addEventListener('click', function() {
                   // ลบรูปภาพ
                   deleteImage(imageRef);
                   // ลบ Element ที่ครอบรูปภาพและปุ่มลบ
                   newImageAnchor.remove();
-              });*/
+              });
 
               newImageAnchor.appendChild(newImage);
-              //newImageAnchor.appendChild(newTag);
+              newImageAnchor.appendChild(newTag);
+              newImageAnchor.appendChild(deleteButton);*/
 
               gallery.appendChild(newImageAnchor);
           }).catch(function(error) {
