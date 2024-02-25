@@ -23,20 +23,30 @@
     </div>
 
     <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileInput'])) {
-            $file = $_FILES['fileInput'];
-            $file_name = $file['name'];
-            $file_tmp = $file['tmp_name'];
-            $file_destination = 'images/' . $file_name;
+    // Check if a file has been uploaded
+    if(isset($_FILES['fileInput'])) {
+        // File upload path
+        $targetDir = "images/";
+        $fileName = basename($_FILES["fileInput"]["name"]);
+        $targetFilePath = $targetDir . $fileName;
+        $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
 
-            if (move_uploaded_file($file_tmp, $file_destination)) {
-                // อัปโหลดไฟล์สำเร็จ
-                echo '<a href="' . $file_destination . '" data-lightbox="models"><img src="' . $file_destination . '"></a>';
-            } else {
-                // อัปโหลดไฟล์ไม่สำเร็จ
-                echo 'เกิดข้อผิดพลาดในการอัปโหลดไฟล์';
+        // Allow certain file formats
+        $allowTypes = array('jpg','png','jpeg','gif');
+        if(in_array($fileType, $allowTypes)){
+            // Upload file to server
+            if(move_uploaded_file($_FILES["fileInput"]["tmp_name"], $targetFilePath)){
+                // Generate HTML for displaying the uploaded image
+                $imageHTML = '<a href="'.$targetFilePath.'" data-lightbox="models"><img src="'.$targetFilePath.'"></a>';
+                // Display the HTML for the uploaded image
+                echo $imageHTML;
+            } else{
+                echo "Sorry, there was an error uploading your file.";
             }
+        } else{
+            echo 'Sorry, only JPG, JPEG, PNG, GIF files are allowed to upload.';
         }
+    }
     ?>
 
     <!--=============== JAVASCRIPT ===============-->
