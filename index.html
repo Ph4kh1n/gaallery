@@ -22,33 +22,6 @@
         </div>
     </div>
 
-    <?php
-    // Check if a file has been uploaded
-    if(isset($_FILES['fileInput'])) {
-        // File upload path
-        $targetDir = "images/";
-        $fileName = basename($_FILES["fileInput"]["name"]);
-        $targetFilePath = $targetDir . $fileName;
-        $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
-
-        // Allow certain file formats
-        $allowTypes = array('jpg','png','jpeg','gif');
-        if(in_array($fileType, $allowTypes)){
-            // Upload file to server
-            if(move_uploaded_file($_FILES["fileInput"]["tmp_name"], $targetFilePath)){
-                // Generate HTML for displaying the uploaded image
-                $imageHTML = '<a href="'.$targetFilePath.'" data-lightbox="models"><img src="'.$targetFilePath.'"></a>';
-                // Display the HTML for the uploaded image
-                echo $imageHTML;
-            } else{
-                echo "Sorry, there was an error uploading your file.";
-            }
-        } else{
-            echo 'Sorry, only JPG, JPEG, PNG, GIF files are allowed to upload.';
-        }
-    }
-    ?>
-
     <!--=============== JAVASCRIPT ===============-->
     <script src="scrollreveal.min.js"></script>
     <script src="script.js"></script>

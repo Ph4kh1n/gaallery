@@ -12,35 +12,25 @@ setTimeout(function() {
 }, 3000);
 
 function uploadImage() {
-  // เลือกไฟล์จาก input
   var fileInput = document.getElementById('fileInput');
   var file = fileInput.files[0];
+  var formData = new FormData();
+  formData.append('image', file);
 
-  // สร้างออบเจก File Reader
-  var reader = new FileReader();
-
-  // เมื่ออ่านไฟล์เสร็จสิ้น
-  reader.onload = function(e) {
-      // นำข้อมูลรูปภาพไปใช้งาน
-      var imageData = e.target.result;
-
-      // สร้าง Element ของรูปภาพ
-      var imgElement = document.createElement('img');
-      imgElement.src = imageData;
-
-      // สร้าง Element ของลิงก์
-      var linkElement = document.createElement('a');
-      linkElement.href = imageData; // ให้ลิงก์นี้ชี้ไปยังรูปภาพ
-      linkElement.setAttribute('data-lightbox', 'models'); // เพิ่ม Attribute data-lightbox
-      linkElement.appendChild(imgElement); // เพิ่ม Element ของรูปภาพลงในลิงก์
-
-      // นำ Element ของลิงก์ไปแทรกใน Element ที่มี class="gallery"
-      var gallery = document.querySelector('.gallery');
-      gallery.appendChild(linkElement);
+  // เริ่มการส่งข้อมูลด้วย AJAX
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'upload.php', true);
+  xhr.onload = function () {
+      if (xhr.status === 200) {
+          var response = xhr.responseText;
+          // เมื่ออัพโหลดเสร็จสิ้น แทรกโค้ด HTML เพื่อแสดงภาพ
+          var gallery = document.querySelector('.gallery');
+          gallery.innerHTML += '<a href="images/' + response + '" data-lightbox="models"><img src="images/' + response + '"></a>';
+      } else {
+          alert('การอัพโหลดล้มเหลว: ' + xhr.status);
+      }
   };
-
-  // อ่านไฟล์เป็น Data URL
-  reader.readAsDataURL(file);
+  xhr.send(formData);
 }
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
