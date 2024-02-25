@@ -35,30 +35,6 @@ function getFile(e) {
   fileText.innerHTML = fileName;
 }
 
-// โหลดรูปภาพที่มีอยู่ใน Local Storage เมื่อหน้าเว็บโหลดขึ้นมาใหม่
-function loadImagesFromLocalStorage() {
-  const storedImages = JSON.parse(localStorage.getItem('images')) || [];
-
-  storedImages.forEach(function(url) {
-      const newImageAnchor = document.createElement('a');
-      newImageAnchor.setAttribute('href', url);
-      newImageAnchor.setAttribute('data-lightbox', 'models');
-
-      const newImage = document.createElement('img');
-      newImage.setAttribute('src', url);
-
-      newImageAnchor.appendChild(newImage);
-      gallery.appendChild(newImageAnchor);
-  });
-}
-
-// เพิ่ม URL ของรูปภาพลงใน Local Storage
-function addImageToLocalStorage(url) {
-  const storedImages = JSON.parse(localStorage.getItem('images')) || [];
-  storedImages.push(url);
-  localStorage.setItem('images', JSON.stringify(storedImages));
-}
-
 // ฟังก์ชันสำหรับการอัปโหลดภาพ
 function uploadImage() {
   let storageRef = firebase.storage().ref("images/" + fileName);
@@ -88,10 +64,21 @@ function uploadImage() {
   })
 }
 
-// เมื่อเอกสารโหลดเสร็จสมบูรณ์ โหลดรูปภาพจาก Local Storage
-document.addEventListener("DOMContentLoaded", function() {
-  loadImagesFromLocalStorage();
-});
+function loadImagesFromLocalStorage() {
+  const storedImages = JSON.parse(localStorage.getItem('images')) || [];
+
+  storedImages.forEach(function(url) {
+      const newImageAnchor = document.createElement('a');
+      newImageAnchor.setAttribute('href', url);
+      newImageAnchor.setAttribute('data-lightbox', 'models');
+
+      const newImage = document.createElement('img');
+      newImage.setAttribute('src', url);
+
+      newImageAnchor.appendChild(newImage);
+      gallery.appendChild(newImageAnchor);
+  });
+}
 
 // โหลดรูปภาพที่มีอยู่ใน Firebase Storage เมื่อหน้าเว็บโหลดขึ้นมาใหม่
 function loadImagesFromFirebase() {
@@ -103,22 +90,26 @@ function loadImagesFromFirebase() {
       result.items.forEach(function(imageRef) {
           // ดึง URL ของรูปภาพและแสดงผลใน Gallery
           imageRef.getDownloadURL().then(function(url) {
-              const newImageAnchor = document.createElement('div'); // สร้าง Element div สำหรับรวมรูปภาพและปุ่มลบ
+
+              const newImageAnchor = document.createElement('a');
+              newImageAnchor.setAttribute('href', url);
+              newImageAnchor.setAttribute('data-lightbox', 'models');
+              //const newImageAnchor = document.createElement('div'); // สร้าง Element div สำหรับรวมรูปภาพและปุ่มลบ
 
               const newImage = document.createElement('img');
               newImage.setAttribute('src', url);
 
-              const deleteButton = document.createElement('button');
+              /*const deleteButton = document.createElement('button');
               deleteButton.textContent = 'Delete';
               deleteButton.addEventListener('click', function() {
                   // ลบรูปภาพ
                   deleteImage(imageRef);
                   // ลบ Element ที่ครอบรูปภาพและปุ่มลบ
                   newImageAnchor.remove();
-              });
+              });*/
 
               newImageAnchor.appendChild(newImage);
-              newImageAnchor.appendChild(deleteButton);
+              //newImageAnchor.appendChild(newTag);
 
               gallery.appendChild(newImageAnchor);
           }).catch(function(error) {
