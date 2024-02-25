@@ -11,26 +11,29 @@ setTimeout(function() {
 
 }, 3000);
 
-function uploadImage() {
-  var fileInput = document.getElementById('fileInput');
-  var file = fileInput.files[0];
-  var formData = new FormData();
-  formData.append('image', file);
+function uploadToGitHub() {
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
 
-  // เริ่มการส่งข้อมูลด้วย AJAX
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'upload.php', true);
-  xhr.onload = function () {
-      if (xhr.status === 200) {
-          var response = xhr.responseText;
-          // เมื่ออัพโหลดเสร็จสิ้น แทรกโค้ด HTML เพื่อแสดงภาพ
-          var gallery = document.querySelector('.gallery');
-          gallery.innerHTML += '<a href="images/' + response + '" data-lightbox="models"><img src="images/' + response + '"></a>';
-      } else {
-          alert('การอัพโหลดล้มเหลว: ' + xhr.status);
-      }
-  };
-  xhr.send(formData);
+  if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch('upload_to_github.php', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => {
+          if (response.ok) {
+              alert('File uploaded successfully!');
+          } else {
+              alert('Failed to upload file.');
+          }
+      })
+      .catch(error => console.error('Error:', error));
+  } else {
+      alert('Please select a file to upload.');
+  }
 }
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
