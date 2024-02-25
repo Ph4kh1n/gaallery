@@ -14,16 +14,24 @@
         </div>
     
         <div id="main" class="hidden">
-            <input type="file" id="fileInput">
-            <button onclick="uploadToGitHub()" class="upload-button">Upload</button>
+            <input type="file"
+                class="inputFile"
+                id="inputFile"
+                onchange="getFile(event)"
+                accept="image/png, image/jpeg"
+            />
+            <label for="fileinput"></label>
+            <span class="fileText"></span>
+            <button onclick="uploadImage()">Upload</button>
             <div class="gallery">
-                
+            
             </div>
         </div>
     </div>
 
     <!--=============== JAVASCRIPT ===============-->
     <script src="scrollreveal.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase.js"></script>
     <script src="script.js"></script>
     <script src="lightbox-plus-jquery.js"></script>
 </body>
