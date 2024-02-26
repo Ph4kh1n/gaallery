@@ -50,10 +50,10 @@ function uploadImage() {
       uploadPercent.innerHTML = percentVal + "%";
       progress.style.width = percentVal + "%";
 
-      
   },(error)=>{
     console.log("Error is ", error);
   },()=>{
+    
     uploadTask.snapshot.ref.getDownloadURL().then(url => {
         console.log("URL", url);
 
@@ -75,21 +75,6 @@ function uploadImage() {
   })
 }
 
-function loadImagesFromLocalStorage() {
-  const storedImages = JSON.parse(localStorage.getItem('images')) || [];
-
-  storedImages.forEach(function(url) {
-      const newImageAnchor = document.createElement('a');
-      newImageAnchor.setAttribute('href', url);
-      newImageAnchor.setAttribute('data-lightbox', 'models');
-
-      const newImage = document.createElement('img');
-      newImage.setAttribute('src', url);
-
-      newImageAnchor.appendChild(newImage);
-      gallery.appendChild(newImageAnchor);
-  });
-}
 
 // โหลดรูปภาพที่มีอยู่ใน Firebase Storage เมื่อหน้าเว็บโหลดขึ้นมาใหม่
 function loadImagesFromFirebase() {
