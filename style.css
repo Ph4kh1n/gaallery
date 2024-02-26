@@ -12,11 +12,12 @@
       Teal: hsl(174, 63%, 62%)
   */
 
-  --hue: 174;
+  --hue: 250;
   --sat: 66%;
   --lig: 75%;
   --first-color: hsl(var(--hue), var(--sat), var(--lig));
   --first-color-alt: hsl(var(--hue), var(--sat), 71%); /* -4% */
+  --sec-color-alt: hsl(var(--hue), var(--sat), 65%);
   --title-color: hsl(var(--hue), 12%, 15%);
   --text-color: hsl(var(--hue), 12%, 45%);
   --text-color-light: hsl(var(--hue), 8%, 75%);
@@ -46,7 +47,6 @@ body {
     background-color: var(--body-color);
     color: var(--text-color);
     transition: .3s; /* For animation dark mode */
-    background-color: #fff;
     min-height: 100vh;
 }
 
@@ -130,19 +130,61 @@ img {
     border-radius: 16px;
 }
 
+.upload-container {
+    text-align: center;
+}
+
+.inputFile {
+    display: none;
+    width: 20%;
+}
+
+.custom-file-upload {
+    background-color: var(--first-color);
+    border-radius: 5px;
+    border: none;
+    color: var(--text-color-lighten);
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 20px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-file-upload:hover {
+    background-color: var(--first-color-alt);
+  }
+
 .upload-button {
-    background-color: #4CAF50; /* สีเขียว */
-    color: white;
+    background-color: var(--first-color); /* สีเขียว */
+    color: var(--text-color-lighten);
     padding: 12px 20px;
     margin: 8px 0;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
+    width: 20%;
     font-size: 16px;
     box-sizing: border-box;
 }
 
 .upload-button:hover {
-    background-color: #45a049; /* เปลี่ยนสีเมื่อเมาส์ชี้ */
+    background-color: var(--first-color-alt); /* เปลี่ยนสีเมื่อเมาส์ชี้ */
+}
+
+.bar {
+    height: 1vh;
+    width: 100%;
+    background: var(--first-color);
+    margin-bottom: 10px;
+}
+
+.bar .progress {
+    background: var(--sec-color-alt);
+    height: 100%;
+    width: 0%;
+}
+
+.uploadPercent {
+    color: var(--text-color);
 }

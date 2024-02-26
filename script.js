@@ -24,6 +24,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 var fileText = document.querySelector(".fileText");
+var uploadPercent = document.querySelector(".uploadPercent");
+var progress = document.querySelector(".progress");
+var percentVal;
 var fileItem;
 var fileName;
 var img = document.querySelector("img");
@@ -42,25 +45,33 @@ function uploadImage() {
 
   uploadTask.on("state_changed", (snapshot) => {
       console.log(snapshot);
+      percentVal = Math.floor((snapshot.bytesTransferred/snapshot.totalBytes)*100);
+      console.log(percentVal);
+      uploadPercent.innerHTML = percentVal + "%";
+      progress.style.width = percentVal + "%";
 
-      uploadTask.snapshot.ref.getDownloadURL().then(url => {
-          console.log("URL", url);
+      
+  },(error)=>{
+    console.log("Error is ", error);
+  },()=>{
+    uploadTask.snapshot.ref.getDownloadURL().then(url => {
+        console.log("URL", url);
 
-          if (url != "") {
-              // เพิ่ม URL ของรูปภาพลงใน Local Storage
-              addImageToLocalStorage(url);
+        if (url != "") {
+            // เพิ่ม URL ของรูปภาพลงใน Local Storage
+            addImageToLocalStorage(url);
 
-              const newImageAnchor = document.createElement('a');
-              newImageAnchor.setAttribute('href', url);
-              newImageAnchor.setAttribute('data-lightbox', 'models');
+            const newImageAnchor = document.createElement('a');
+            newImageAnchor.setAttribute('href', url);
+            newImageAnchor.setAttribute('data-lightbox', 'models');
 
-              const newImage = document.createElement('img');
-              newImage.setAttribute('src', url);
+            const newImage = document.createElement('img');
+            newImage.setAttribute('src', url);
 
-              newImageAnchor.appendChild(newImage);
-              gallery.appendChild(newImageAnchor);
-          }
-      })
+            newImageAnchor.appendChild(newImage);
+            gallery.appendChild(newImageAnchor);
+        }
+    })
   })
 }
 
@@ -98,7 +109,7 @@ function loadImagesFromFirebase() {
 
               const newImage = document.createElement('img');
               newImage.setAttribute('src', url);
-              
+
               newImageAnchor.appendChild(newImage);
 
               /*const newTag = document.createElement('a');

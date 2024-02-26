@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-store" />
-    <title>Phakhin Gallery</title>
+    <title>Phakhin's Gallery</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="lightbox.css">
 </head>
@@ -15,15 +15,21 @@
         </div>
     
         <div id="main" class="hidden">
-            <input type="file"
-                class="inputFile"
-                id="inputFile"
-                onchange="getFile(event)"
-                accept="image/png, image/jpeg"
-            />
-            <label for="fileinput"></label>
-            <span class="fileText"></span>
-            <button class="upload-button" onclick="uploadImage()">Upload</button>
+            <div class="upload-container">
+                <input type="file"
+                    class="inputFile"
+                    id="fileinput"
+                    onchange="getFile(event)"
+                    accept="image/png, image/jpeg"
+                />
+                <label for="fileinput" class="custom-file-upload">Choose File</label>
+                <span class="fileText"></span>
+                <button class="upload-button" onclick="uploadImage()">Upload</button>
+                <div class="bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="uploadPercent">0%</div>
+            </div>
             <div class="gallery">
             
             </div>
