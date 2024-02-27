@@ -116,7 +116,7 @@ body {
 
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     grid-gap: 30px;
 }
 
@@ -128,6 +128,12 @@ body {
 
 img {
     border-radius: 16px;
+    transition: 0.5s;
+}
+
+img:hover {
+    transform: scale(1.1);
+    
 }
 
 .upload-container {
@@ -186,4 +192,5 @@ img {
 
 .uploadPercent {
     color: var(--text-color);
+    margin-bottom: 10px;
 }

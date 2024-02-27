@@ -32,6 +32,7 @@ var fileName;
 var img = document.querySelector("img");
 var newImageAnchor = document.createElement('a');
 var gallery = document.querySelector('.gallery');
+
 function getFile(e) {
   fileItem = e.target.files[0];
   fileName = fileItem.name;
@@ -59,7 +60,7 @@ function uploadImage() {
 
         if (url != "") {
             // เพิ่ม URL ของรูปภาพลงใน Local Storage
-            addImageToLocalStorage(url);
+            //addImageToLocalStorage(url);
 
             const newImageAnchor = document.createElement('a');
             newImageAnchor.setAttribute('href', url);
