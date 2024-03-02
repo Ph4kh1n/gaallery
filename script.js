@@ -41,13 +41,20 @@ function getFile(e) {
 
 // ฟังก์ชันสำหรับการอัปโหลดภาพ
 function uploadImage() {
+  var currentDate = new Date();
+  var fileName = currentDate.getFullYear() + '-' 
+      + (currentDate.getMonth() + 1) + '-' 
+      + currentDate.getDate() + '_' 
+      + currentDate.getHours() + '-' 
+      + currentDate.getMinutes() + '-' 
+      + currentDate.getSeconds() + '.jpg';
+
   let storageRef = firebase.storage().ref("images/" + fileName);
   let uploadTask = storageRef.put(fileItem);
 
   uploadTask.on("state_changed", (snapshot) => {
       console.log(snapshot);
       percentVal = Math.floor((snapshot.bytesTransferred/snapshot.totalBytes)*100);
-      console.log(percentVal);
       uploadPercent.innerHTML = percentVal + "%";
       progress.style.width = percentVal + "%";
 
@@ -59,18 +66,17 @@ function uploadImage() {
         console.log("URL", url);
 
         if (url != "") {
-            // เพิ่ม URL ของรูปภาพลงใน Local Storage
-            //addImageToLocalStorage(url);
 
-            const newImageAnchor = document.createElement('a');
-            newImageAnchor.setAttribute('href', url);
-            newImageAnchor.setAttribute('data-lightbox', 'models');
-
-            const newImage = document.createElement('img');
-            newImage.setAttribute('src', url);
-
-            newImageAnchor.appendChild(newImage);
-            gallery.appendChild(newImageAnchor);
+          const newImageAnchor = document.createElement('a');
+          newImageAnchor.setAttribute('href', url);
+          newImageAnchor.setAttribute('data-lightbox', 'models');
+      
+          const newImage = document.createElement('img');
+          newImage.setAttribute('src', url);
+      
+          // แทรกรูปภาพใหม่ข้างหน้ารูปภาพเก่า
+          gallery.insertBefore(newImageAnchor, gallery.firstChild);
+          newImageAnchor.appendChild(newImage);
         }
     })
   })
@@ -84,58 +90,64 @@ function loadImagesFromFirebase() {
 
   // ดึงรายการไฟล์ทั้งหมดภายในโฟลเดอร์ images
   storageRef.listAll().then(function(result) {
-      result.items.forEach(function(imageRef) {
-          // ดึง URL ของรูปภาพและแสดงผลใน Gallery
-          imageRef.getDownloadURL().then(function(url) {
+    // สร้างอาร์เรย์เพื่อเก็บข้อมูลของรูปภาพ
+    let images = [];
 
-              const newImageAnchor = document.createElement('a');
-              newImageAnchor.setAttribute('href', url);
-              newImageAnchor.setAttribute('data-lightbox', 'models');
-              //const newImageAnchor = document.createElement('div'); // สร้าง Element div สำหรับรวมรูปภาพและปุ่มลบ
-
-              const newImage = document.createElement('img');
-              newImage.setAttribute('src', url);
-
-              newImageAnchor.appendChild(newImage);
-
-              /*const newTag = document.createElement('a');
-              newTag.setAttribute('href', url);
-              newTag.setAttribute('data-lightbox', 'models');
-              const newImageAnchor = document.createElement('div'); // สร้าง Element div สำหรับรวมรูปภาพและปุ่มลบ
-
-              const newImage = document.createElement('img');
-              newImage.setAttribute('src', url);
-
-              const deleteButton = document.createElement('button');
-              deleteButton.textContent = 'Delete';
-              deleteButton.addEventListener('click', function() {
-                  // ลบรูปภาพ
-                  deleteImage(imageRef);
-                  // ลบ Element ที่ครอบรูปภาพและปุ่มลบ
-                  newImageAnchor.remove();
-              });
-
-              newImageAnchor.appendChild(newImage);
-              newImageAnchor.appendChild(newTag);
-              newImageAnchor.appendChild(deleteButton);*/
-
-              gallery.appendChild(newImageAnchor);
-          }).catch(function(error) {
-              console.log(error);
-          });
+    // วนลูปผ่านรายการไฟล์
+    result.items.forEach(function(imageRef) {
+      // ดึง URL ของรูปภาพและแสดงผลใน Gallery
+      imageRef.getDownloadURL().then(function(url) {
+        // เรียกเมื่อ URL ได้รับค่า
+        images.push({ url: url, name: imageRef.name });
+        
+        // เมื่อเราได้รับ URL ของรูปภาพทั้งหมดแล้ว
+        // เราสามารถเรียกฟังก์ชันเรียงลำดับและแสดงผลได้
+        if (images.length === result.items.length) {
+          displayImages(images);
+        }
+      }).catch(function(error) {
+        console.log(error);
       });
+    });
   }).catch(function(error) {
-      console.log(error);
+    console.log(error);
   });
 }
 
-// ลบรูปภาพที่ถูกคลิก
-function deleteImage(imageRef) {
-  // ลบรูปภาพใน Firebase Storage
-  imageRef.delete().then(function() {
-      console.log('Image deleted successfully');
+// แสดงรูปภาพตามลำดับเวลา
+function displayImages(images) {
+  // เรียงลำดับรูปภาพตาม Timestamp จากมากไปหาน้อย
+  images.sort((a, b) => b.name.localeCompare(a.name));
+
+  // แสดงรูปภาพใน Gallery ตามลำดับ
+  images.forEach(function(image) {
+    const newImageAnchor = document.createElement('div'); // เปลี่ยนจาก 'a' เป็น 'div'
+    newImageAnchor.setAttribute('class', 'imageContainer');
+
+    const newImage = document.createElement('img');
+    newImage.setAttribute('src', image.url);
+
+    /*const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', function() {
+      // ลบรูปภาพ
+      deleteImage(image.name);
+      // ลบ Element ที่ครอบรูปภาพและปุ่มลบ
+      newImageAnchor.remove();
+    });*/
+
+    newImageAnchor.appendChild(newImage);
+    //newImageAnchor.appendChild(deleteButton);
+    gallery.appendChild(newImageAnchor);
+  });
+}
+
+function deleteImage(imageName) {
+  let storageRef = firebase.storage().ref("images/" + imageName);
+  storageRef.delete().then(function() {
+    console.log('Image deleted successfully');
   }).catch(function(error) {
-      console.log('Error deleting image: ', error);
+    console.log('Error deleting image: ', error);
   });
 }
 
