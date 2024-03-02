@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-store" />
+    <meta property="og:url" content="https://ph4kh1n.github.io/gallery">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ph4kh1n's Gallery">
+    <meta property="og:description" content="คลังรูปของภาคินผู้นี้">
+
     <title>Phakhin's Gallery</title>
+    <link rel="shortcut icon" href="images/photo-camera.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="lightbox.css">
 </head>
@@ -18,13 +24,13 @@
             <div class="upload-container">
                 <input type="file"
                     class="inputFile"
-                    id="fileinput"
+                    id="fileinput" multiple
                     onchange="getFile(event)"
                     accept="image/png, image/jpeg"
                 />
                 <label for="fileinput" class="custom-file-upload">Choose File</label>
                 <span class="fileText"></span>
-                <button class="upload-button" onclick="uploadImage()">Upload</button>
+                <button class="upload-button" onclick="uploadImages()">Upload</button>
                 <div class="bar">
                     <div class="progress"></div>
                 </div>
